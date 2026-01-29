@@ -3,25 +3,22 @@ package com.marnaud.gaming_coach_booking.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "role")
-public class Role {
+@Table(name = "gamer")
+public class Gamer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @Column(name = "name", unique = true)
-    private String name;
-
-    @ManyToMany(mappedBy = "roles")
-    private List<AppUser> users;
+    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "user_id")
+    private AppUser user;
 }

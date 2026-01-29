@@ -19,10 +19,10 @@ public class AppUser extends BaseEntity {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -34,4 +34,24 @@ public class AppUser extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Coach coach;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Gamer gamer;
+
+    public void setCoach(Coach coach) {
+        this.coach = coach;
+        if (coach != null) {
+            coach.setUser(this);
+        }
+    }
+
+    public void setGamer(Gamer gamer) {
+        this.gamer = gamer;
+        if (gamer != null) {
+            gamer.setUser(this);
+        }
+    }
 }
