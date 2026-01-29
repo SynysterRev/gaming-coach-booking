@@ -10,12 +10,12 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Table(name = "gamer")
-public class Gamer {
+public class Gamer extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.PERSIST, CascadeType.REFRESH})

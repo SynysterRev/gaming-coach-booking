@@ -12,12 +12,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 @Table(name = "coach")
-public class Coach {
+public class Coach extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Column(name = "hourly_rate", precision = 6, scale = 2)
     private BigDecimal hourlyRate;
