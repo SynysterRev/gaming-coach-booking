@@ -3,6 +3,7 @@ package com.marnaud.gaming_coach_booking.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -53,5 +54,13 @@ public class AppUser extends BaseEntity {
         if (gamer != null) {
             gamer.setUser(this);
         }
+    }
+
+    public void addRole(Role role) {
+        if (roles == null) {
+            roles = new ArrayList<>();
+        }
+
+        roles.add(role);
     }
 }

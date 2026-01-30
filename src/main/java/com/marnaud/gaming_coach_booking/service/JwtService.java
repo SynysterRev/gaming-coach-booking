@@ -26,6 +26,7 @@ public class JwtService {
     }
 
     public String extractUsername(String token) {
+
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -38,12 +39,13 @@ public class JwtService {
         return Jwts.builder()
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + jwtExpiration)) // 24h
-                .signWith(getSigningKey()) // Plus besoin de préciser l'algorithme, il le déduit
+                .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(getSigningKey())
                 .compact();
     }
 
     public long getExpirationTime() {
+
         return jwtExpiration;
     }
 
@@ -59,10 +61,10 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .verifyWith(getSigningKey()) // Nouvelle méthode 0.12+
+                .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
-                .getPayload(); // .getBody() est deprecated, on utilise .getPayload()
+                .getPayload();
     }
 
     private boolean isTokenExpired(String token) {
