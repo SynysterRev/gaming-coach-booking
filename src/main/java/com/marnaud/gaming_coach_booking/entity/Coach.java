@@ -25,8 +25,8 @@ public class Coach extends BaseEntity {
     @Column(name = "bio")
     private String bio;
 
-    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE,
+    @OneToOne(mappedBy = "coach",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "user_id")
     private AppUser user;
 }

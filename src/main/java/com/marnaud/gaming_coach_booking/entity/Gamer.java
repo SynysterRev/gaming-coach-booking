@@ -17,8 +17,8 @@ public class Gamer extends BaseEntity {
     @Column(name = "id")
     private long id;
 
-    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "user_id")
+    @OneToOne(mappedBy = "gamer",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE,
+                    CascadeType.PERSIST, CascadeType.REFRESH})
     private AppUser user;
 }

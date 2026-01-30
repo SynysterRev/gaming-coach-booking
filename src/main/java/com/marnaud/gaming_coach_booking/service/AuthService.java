@@ -1,5 +1,6 @@
 package com.marnaud.gaming_coach_booking.service;
 
+import com.marnaud.gaming_coach_booking.dto.AuthResponseDTO;
 import com.marnaud.gaming_coach_booking.dto.RegisterDTO;
 import com.marnaud.gaming_coach_booking.entity.*;
 import com.marnaud.gaming_coach_booking.exception.UserAlreadyExistsException;
@@ -29,7 +30,7 @@ public class AuthService {
     }
 
     @Transactional
-    public void register(RegisterDTO registerDTO) {
+    public AuthResponseDTO register(RegisterDTO registerDTO) {
         if (userRepository.existsByEmail(registerDTO.email())) {
             throw new UserAlreadyExistsException("This email is already used.");
         }
@@ -49,16 +50,25 @@ public class AuthService {
 
         user.addRole(role);
 
-        if (RoleName.COACH.equals(registerDTO.role())) {
+        if (RoleName.ROLE_COACH.toString().equals(registerDTO.role())) {
             Coach coach = new Coach();
 
             user.setCoach(coach);
-        } else if (RoleName.GAMER.equals(registerDTO.role())) {
+        } else if (RoleName.ROLE_GAMER.toString().equals(registerDTO.role())) {
             Gamer gamer = new Gamer();
 
             user.setGamer(gamer);
         }
 
-        userRepository.save(user);
+        AppUser savedUser = userRepository.save(user);
+
+        CustomUserDetails userDetails = new CustomUserDetails(savedUser);
+        String token = jwtService.generateToken(userDetails);
+        return new AuthResponseDTO(
+                token,
+                savedUser.getEmail(),
+                savedUser.getUsername(),
+                registerDTO.role()
+        );
     }
 }

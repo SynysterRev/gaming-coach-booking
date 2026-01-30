@@ -1,6 +1,12 @@
 package com.marnaud.gaming_coach_booking.entity;
 
-public class RoleName {
-    public static final String COACH = "COACH";
-    public static final String GAMER = "GAMER";
+public enum RoleName {
+    ROLE_COACH,
+    ROLE_GAMER,
+    ROLE_ADMIN;
+
+    @Override
+    public String toString() {
+        return name();
+    }
 }
