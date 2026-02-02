@@ -114,10 +114,10 @@ docker-compose down -v
 ### Implemented
 
 - **User Registration**: Account creation with JWT token generation for authentication
+- **Authentication**: Login system with JWT
+- **User Profiles**: General informations about the user
 
 ### In Progress / Planned
-
-- **Authentication**: Login system with JWT
 - **User Profiles**: 
   - Coach profile with games expertise, skill levels, and available time slots
   - Gamer profile for booking sessions
