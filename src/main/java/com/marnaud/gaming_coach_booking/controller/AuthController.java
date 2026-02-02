@@ -1,10 +1,9 @@
 package com.marnaud.gaming_coach_booking.controller;
 
 import com.marnaud.gaming_coach_booking.dto.AuthResponseDTO;
+import com.marnaud.gaming_coach_booking.dto.LoginDTO;
 import com.marnaud.gaming_coach_booking.dto.RegisterDTO;
-import com.marnaud.gaming_coach_booking.entity.AppUser;
 import com.marnaud.gaming_coach_booking.service.AuthService;
-import com.marnaud.gaming_coach_booking.service.JwtService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,13 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/v1/auth")
 public class AuthController {
     private final AuthService authService;
-    private final JwtService jwtService;
 
     @Autowired
-    public AuthController(AuthService authService, JwtService jwtService) {
+    public AuthController(AuthService authService) {
 
         this.authService = authService;
-        this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
@@ -30,6 +27,8 @@ public class AuthController {
         return authService.register(registerDTO);
     }
 
-//    @PostMapping("/login")
-//    public String login()
+    @PostMapping("/login")
+    public AuthResponseDTO login(@Valid @RequestBody LoginDTO loginDTO) {
+        return authService.login(loginDTO);
+    }
 }

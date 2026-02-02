@@ -1,15 +1,24 @@
 package com.marnaud.gaming_coach_booking.service;
 
 import com.marnaud.gaming_coach_booking.dto.AuthResponseDTO;
+import com.marnaud.gaming_coach_booking.dto.LoginDTO;
 import com.marnaud.gaming_coach_booking.dto.RegisterDTO;
 import com.marnaud.gaming_coach_booking.entity.*;
+import com.marnaud.gaming_coach_booking.exception.InvalidCredentialsException;
 import com.marnaud.gaming_coach_booking.exception.UserAlreadyExistsException;
 import com.marnaud.gaming_coach_booking.repository.AppUserRepository;
 import com.marnaud.gaming_coach_booking.repository.RoleRepository;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
 
 @Service
@@ -18,15 +27,18 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     public AuthService(AppUserRepository userRepository,
                        JwtService jwtService,
                        PasswordEncoder passwordEncoder,
-                       RoleRepository roleRepository) {
+                       RoleRepository roleRepository,
+                       AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.authenticationManager = authenticationManager;
     }
 
     @Transactional
@@ -68,7 +80,27 @@ public class AuthService {
                 token,
                 savedUser.getEmail(),
                 savedUser.getUsername(),
-                registerDTO.role()
+                Collections.singletonList(registerDTO.role())
         );
+    }
+
+    public AuthResponseDTO login(LoginDTO loginDTO) {
+        Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(loginDTO.email(), loginDTO.password());
+        try {
+            Authentication authenticationResponse = authenticationManager.authenticate(authenticationRequest);
+
+            CustomUserDetails userDetails = (CustomUserDetails) authenticationResponse.getPrincipal();
+
+            AppUser user = userDetails.user();
+            String token = jwtService.generateToken(userDetails);
+            return new AuthResponseDTO(
+                    token,
+                    user.getEmail(),
+                    user.getUsername(),
+                    user.getRoles().stream().map(Role::getName).toList()
+            );
+        } catch (AuthenticationException e) {
+            throw new InvalidCredentialsException("Email or password incorrect.");
+        }
     }
 }
