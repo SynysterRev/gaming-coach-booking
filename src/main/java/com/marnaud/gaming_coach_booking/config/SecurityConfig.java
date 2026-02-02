@@ -40,10 +40,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers("/api/v1/auth/**").permitAll()
-                                .requestMatchers("/api/v1/coaches/**").hasRole("COACH")
-                                .requestMatchers("/api/v1/booking/**").hasAnyRole("COACH", "GAMER")
-                                .requestMatchers("/api/v1/gamers/**").hasRole("GAMER")
-                                .anyRequest().authenticated()
+                                .requestMatchers("/api/v1/me/**").authenticated()
+                                .requestMatchers("/api/v1/coaches/**").authenticated()
+                                .requestMatchers("/api/v1/booking/**").authenticated()
+                                .requestMatchers("/api/v1/gamers/**").authenticated()
+                                .anyRequest().denyAll()
                 )
                 // server keep nothing, REST API
                 .sessionManagement(session ->

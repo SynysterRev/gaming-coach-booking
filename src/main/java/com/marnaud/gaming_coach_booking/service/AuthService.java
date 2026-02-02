@@ -5,6 +5,7 @@ import com.marnaud.gaming_coach_booking.dto.LoginDTO;
 import com.marnaud.gaming_coach_booking.dto.RegisterDTO;
 import com.marnaud.gaming_coach_booking.entity.*;
 import com.marnaud.gaming_coach_booking.exception.InvalidCredentialsException;
+import com.marnaud.gaming_coach_booking.exception.RoleNotFoundException;
 import com.marnaud.gaming_coach_booking.exception.UserAlreadyExistsException;
 import com.marnaud.gaming_coach_booking.repository.AppUserRepository;
 import com.marnaud.gaming_coach_booking.repository.RoleRepository;
@@ -58,7 +59,7 @@ public class AuthService {
                 .build();
 
         Role role = roleRepository.findByName(registerDTO.role())
-                .orElseThrow(() -> new RuntimeException(("Error : role " + registerDTO.role() + " not found")));
+                .orElseThrow(() -> new RoleNotFoundException(("Error : role " + registerDTO.role() + " not found")));
 
         user.addRole(role);
 
