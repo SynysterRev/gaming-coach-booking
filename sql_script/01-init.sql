@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS gamer;
 
 CREATE TABLE coach
 (
-    id          SERIAL PRIMARY KEY,
+    id          BIGSERIAL PRIMARY KEY,
     hourly_rate NUMERIC(6, 2),
     bio         TEXT,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -15,14 +15,14 @@ CREATE TABLE coach
 
 CREATE TABLE gamer
 (
-    id         SERIAL PRIMARY KEY,
+    id         BIGSERIAL PRIMARY KEY,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT NULL
 );
 
 CREATE TABLE app_user
 (
-    id         SERIAL PRIMARY KEY,
+    id         BIGSERIAL PRIMARY KEY,
     username   VARCHAR(100) UNIQUE NOT NULL,
     email      VARCHAR(100) UNIQUE NOT NULL,
     password   VARCHAR(68)         NOT NULL,
@@ -40,14 +40,14 @@ CREATE TABLE app_user
 
 CREATE TABLE role
 (
-    id   SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE user_role
 (
-    user_id int NOT NULL,
-    role_id int NOT NULL,
+    user_id BIGSERIAL NOT NULL,
+    role_id BIGSERIAL NOT NULL,
 
     PRIMARY KEY (user_id, role_id),
 

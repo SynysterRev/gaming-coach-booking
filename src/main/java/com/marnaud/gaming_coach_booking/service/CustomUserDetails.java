@@ -18,6 +18,7 @@ public record CustomUserDetails(AppUser user) implements UserDetails {
 
     @Override
     public @Nullable String getPassword() {
+
         return user.getPassword();
     }
 
