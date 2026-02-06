@@ -1,6 +1,7 @@
 package com.marnaud.gaming_coach_booking.controller;
 
 import com.marnaud.gaming_coach_booking.dto.CoachDTO;
+import com.marnaud.gaming_coach_booking.dto.CoachListDTO;
 import com.marnaud.gaming_coach_booking.service.CoachService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ public class CoachController {
     }
 
     @GetMapping("")
-    public List<CoachDTO> getAll() {
+    public List<CoachListDTO> getAll() {
         return coachService.getAll();
     }
 }

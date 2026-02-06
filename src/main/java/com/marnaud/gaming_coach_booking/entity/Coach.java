@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,4 +30,12 @@ public class Coach extends BaseEntity {
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.PERSIST, CascadeType.REFRESH})
     private AppUser user;
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name ="coach_game",
+            joinColumns = @JoinColumn(name = "coach_id"),
+            inverseJoinColumns = @JoinColumn (name = "game_id")
+    )
+    private List<Game> games;
 }
