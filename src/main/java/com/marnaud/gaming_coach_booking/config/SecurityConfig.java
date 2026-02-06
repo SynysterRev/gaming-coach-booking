@@ -44,6 +44,11 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/coaches/**").authenticated()
                                 .requestMatchers("/api/v1/booking/**").authenticated()
                                 .requestMatchers("/api/v1/gamers/**").authenticated()
+                                .requestMatchers(
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html"
+                                ).permitAll()
                                 .anyRequest().denyAll()
                 )
                 // server keep nothing, REST API
