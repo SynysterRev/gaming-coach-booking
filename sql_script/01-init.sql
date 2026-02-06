@@ -26,10 +26,10 @@ CREATE TABLE app_user
     username   VARCHAR(100) UNIQUE NOT NULL,
     email      VARCHAR(100) UNIQUE NOT NULL,
     password   VARCHAR(68)         NOT NULL,
-    coach_id   int UNIQUE DEFAULT NULL,
-    gamer_id   int UNIQUE DEFAULT NULL,
-    created_at TIMESTAMP  DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP  DEFAULT NULL,
+    coach_id   BIGINT    DEFAULT NULL,
+    gamer_id   BIGINT    DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT NULL,
 
     CONSTRAINT fk_user_coach FOREIGN KEY (coach_id)
         REFERENCES coach (id) ON DELETE SET NULL,
@@ -40,7 +40,7 @@ CREATE TABLE app_user
 
 CREATE TABLE role
 (
-    id BIGSERIAL PRIMARY KEY,
+    id   BIGSERIAL PRIMARY KEY,
     name VARCHAR(50) UNIQUE NOT NULL
 );
 
@@ -58,6 +58,42 @@ CREATE TABLE user_role
     CONSTRAINT fk_role
         FOREIGN KEY (role_id)
             REFERENCES role (id) ON DELETE CASCADE
+);
+
+CREATE TABLE game
+(
+    id      BIGSERIAL PRIMARY KEY,
+    name    VARCHAR(150) UNIQUE NOT NULL,
+    genre   VARCHAR(100)        NOT NULL,
+    details TEXT
+);
+
+CREATE TABLE coach_game
+(
+    coach_id BIGSERIAL NOT NULL,
+    game_id  BIGSERIAL NOT NULL,
+
+    PRIMARY KEY (coach_id, game_id),
+
+    CONSTRAINT fk_coach
+        FOREIGN KEY (coach_id)
+            REFERENCES coach (id) ON DELETE CASCADE,
+
+    CONSTRAINT fk_game
+        FOREIGN KEY (game_id)
+            REFERENCES game (id) ON DELETE CASCADE
+);
+
+CREATE TABLE coaching_slot
+(
+    id         BIGSERIAL PRIMARY KEY,
+    coach_id   BIGINT    NOT NULL,
+    game_id    BIGINT,
+    start_time TIMESTAMP NOT NULL,
+    end_time   TIMESTAMP NOT NULL,
+    status     VARCHAR(20) DEFAULT 'AVAILABLE', -- AVAILABLE, BOOKED, COMPLETED, CANCELLED
+    gamer_id   BIGINT,                          -- NULL if not booked
+    created_at TIMESTAMP   DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO role(name)
