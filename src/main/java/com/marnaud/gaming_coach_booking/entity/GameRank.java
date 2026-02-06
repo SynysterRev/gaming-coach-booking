@@ -3,16 +3,14 @@ package com.marnaud.gaming_coach_booking.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "game")
-public class Game {
+@Table(name = "game_rank")
+public class GameRank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -21,12 +19,10 @@ public class Game {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "genre")
-    private String genre;
+    @Column(name = "rank_order")
+    private int rankOrder;
 
-    @Column(name = "details")
-    private String details;
-
-    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
-    private List<GameRank> gameRanks;
+    @ManyToOne
+    @JoinColumn(name = "game_id", nullable = false)
+    private Game game;
 }

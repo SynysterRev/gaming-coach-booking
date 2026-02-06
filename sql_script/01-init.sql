@@ -68,22 +68,6 @@ CREATE TABLE game
     details TEXT
 );
 
-CREATE TABLE coach_game
-(
-    coach_id BIGSERIAL NOT NULL,
-    game_id  BIGSERIAL NOT NULL,
-
-    PRIMARY KEY (coach_id, game_id),
-
-    CONSTRAINT fk_coach
-        FOREIGN KEY (coach_id)
-            REFERENCES coach (id) ON DELETE CASCADE,
-
-    CONSTRAINT fk_game
-        FOREIGN KEY (game_id)
-            REFERENCES game (id) ON DELETE CASCADE
-);
-
 CREATE TABLE coaching_slot
 (
     id         BIGSERIAL PRIMARY KEY,
@@ -94,6 +78,35 @@ CREATE TABLE coaching_slot
     status     VARCHAR(20) DEFAULT 'AVAILABLE', -- AVAILABLE, BOOKED, COMPLETED, CANCELLED
     gamer_id   BIGINT,                          -- NULL if not booked
     created_at TIMESTAMP   DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE game_rank
+(
+    id         BIGSERIAL PRIMARY KEY,
+    name       VARCHAR(50) NOT NULL,
+    rank_order INT,
+    game_id    BIGINT      NOT NULL,
+    CONSTRAINT fk_game
+        FOREIGN KEY (game_id)
+            REFERENCES game (id) ON DELETE CASCADE
+);
+
+CREATE TABLE coach_game_rank
+(
+    id       BIGSERIAL PRIMARY KEY,
+    coach_id BIGINT NOT NULL,
+    game_id  BIGINT NOT NULL,
+    rank_id  BIGINT NOT NULL,
+    UNIQUE (coach_id, game_id),
+    CONSTRAINT fk_game
+        FOREIGN KEY (game_id)
+            REFERENCES game (id) ON DELETE CASCADE,
+    CONSTRAINT fk_coach
+        FOREIGN KEY (coach_id)
+            REFERENCES coach (id) ON DELETE CASCADE,
+    CONSTRAINT fk_rank
+        FOREIGN KEY (rank_id)
+            REFERENCES game_rank (id) ON DELETE CASCADE
 );
 
 INSERT INTO role(name)

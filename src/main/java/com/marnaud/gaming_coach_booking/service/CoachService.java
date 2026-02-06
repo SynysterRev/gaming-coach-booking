@@ -5,6 +5,8 @@ import com.marnaud.gaming_coach_booking.dto.CoachListDTO;
 import com.marnaud.gaming_coach_booking.entity.Coach;
 import com.marnaud.gaming_coach_booking.mapper.CoachMapper;
 import com.marnaud.gaming_coach_booking.repository.CoachRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +21,14 @@ public class CoachService {
         this.coachMapper = coachMapper;
     }
 
-    public List<CoachListDTO> getAll() {
-        List<Coach> coaches = coachRepository.findAllWithUserAndGames();
-        return coachMapper.toListDTO(coaches);
+    public Page<CoachListDTO> getAll(String gameName, Pageable pageable) {
+        Page<Coach> coaches;
+//        if (gameName != null && !gameName.isEmpty()) {
+//            coaches = coachRepository.findCoachesByGamesContainingIgnoreCase(gameName, pageable);
+//        } else {
+//            coaches = coachRepository.findAllWithUserAndGames(pageable);
+//        }
+        coaches = coachRepository.findAllWithUserAndGames(pageable);
+        return coaches.map(coachMapper::toListDTO);
     }
 }
